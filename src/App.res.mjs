@@ -24,19 +24,19 @@ function getCharWidth(c) {
 function App$WordIcon(props) {
   var __size = props.size;
   var size = __size !== undefined ? __size : 4;
-  var sArr = props.text.split("");
-  var withCharWidth = sArr.map(function (c) {
+  var textChars = props.text.split("");
+  var textCharsAndCharWidth = textChars.map(function (c) {
         return [
                 c,
                 getCharWidth(c)
               ];
       });
-  var totalWidth = Core__Array.reduce(withCharWidth, 0, (function (acc, param) {
+  var textMeasure = Core__Array.reduce(textCharsAndCharWidth, 0, (function (acc, param) {
           return acc + param[1] | 0;
         }));
-  var rootWidth = Math.sqrt(totalWidth);
-  var bound = Math.round(rootWidth * 2.2) | 0;
-  var match = Core__Array.reduce(withCharWidth, [
+  var textMeasureRoot = Math.sqrt(textMeasure);
+  var bound = Math.round(textMeasureRoot * 2.2) | 0;
+  var match = Core__Array.reduce(textCharsAndCharWidth, [
         [],
         [],
         0
@@ -66,18 +66,18 @@ function App$WordIcon(props) {
                   ];
           }
         }));
-  var dividedArrs = Belt_Array.concatMany([
+  var textCharsDivisions = Belt_Array.concatMany([
         match[0],
         [match[1]]
       ]);
-  var dividedS = dividedArrs.map(function (curS) {
+  var textDivisions = textCharsDivisions.map(function (curS) {
         return curS.join("");
       });
-  var widthScaler = size / rootWidth;
-  var heightScaler = widthScaler / dividedS.length;
+  var widthScaler = size / textMeasureRoot;
+  var heightScaler = widthScaler / textDivisions.length;
   var scaledMaring = "-" + (0.8 * heightScaler).toString() + "rem";
   return JsxRuntime.jsx("div", {
-              children: dividedS.map(function (sPart) {
+              children: textDivisions.map(function (sPart) {
                     return JsxRuntime.jsx("div", {
                                 children: sPart,
                                 style: {
@@ -95,62 +95,26 @@ function App$WordIcon(props) {
             });
 }
 
-function App$Wrap(props) {
-  return JsxRuntime.jsx("div", {
-              children: props.children,
-              className: "p-2 border rounded w-fit m-2 border-gray-300 shadow "
-            });
-}
-
 function App(props) {
-  return JsxRuntime.jsxs("div", {
+  return JsxRuntime.jsx("div", {
               children: [
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Settings"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Delete"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Menu"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Hang Up"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Edit"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Home"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Zoom"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "back"
-                          })
-                    }),
-                JsxRuntime.jsx(App$Wrap, {
-                      children: JsxRuntime.jsx(App$WordIcon, {
-                            text: "Ask Question"
-                          })
-                    })
-              ],
+                  "Settings",
+                  "Delete",
+                  "Menu",
+                  "Hang Up",
+                  "Edit",
+                  "Home",
+                  "Zoom",
+                  "back",
+                  "Ask Question"
+                ].map(function (text) {
+                    return JsxRuntime.jsx("div", {
+                                children: JsxRuntime.jsx(App$WordIcon, {
+                                      text: text
+                                    }),
+                                className: "p-2 border rounded w-fit m-2 border-gray-300 shadow "
+                              });
+                  }),
               className: "p-6"
             });
 }

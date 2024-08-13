@@ -60,24 +60,26 @@ let getCharWidth = c => {
 module WordIcon = {
   @react.component
   let make = (~text: string, ~size: int=4) => {
-    let s = text
-    let sArr = s->String.split("")
-    let withCharWidth = sArr->Array.map(c => (c, c->getCharWidth))
-    let totalWidth = withCharWidth->Array.reduce(0, (acc, (_, w)) => {
+    let textChars = text->String.split("")
+    let textCharsAndCharWidth = textChars->Array.map(c => (c, c->getCharWidth))
+    let textMeasure = textCharsAndCharWidth->Array.reduce(0, (acc, (_, w)) => {
       acc + w
     })
-    let rootWidth = Math.sqrt(totalWidth->Int.toFloat)
-    let bound = Math.round(rootWidth *. 2.2)->Float.toInt
-    let dividedArrs = {
-      let (x, y, _) = withCharWidth->Array.reduce(([], [], 0), ((acc, curS, curW), (c, w)) => {
+    let textMeasureRoot = Math.sqrt(textMeasure->Int.toFloat)
+    let bound = Math.round(textMeasureRoot *. 2.2)->Float.toInt
+    let textCharsDivisions = {
+      let (x, y, _) = textCharsAndCharWidth->Array.reduce(([], [], 0), (
+        (acc, curS, curW),
+        (c, w),
+      ) => {
         curW + w > bound ? ([...acc, curS], [c], w) : (acc, [...curS, c], curW + w)
       })
       [...x, y]
     }
-    let dividedS = dividedArrs->Array.map(curS => curS->Array.join(""))
+    let textDivisions = textCharsDivisions->Array.map(curS => curS->Array.join(""))
 
-    let widthScaler = size->Int.toFloat /. rootWidth
-    let heightScaler = widthScaler /. dividedS->Array.length->Int.toFloat
+    let widthScaler = size->Int.toFloat /. textMeasureRoot
+    let heightScaler = widthScaler /. textDivisions->Array.length->Int.toFloat
     let scaledMaring = "-" ++ (0.8 *. heightScaler)->Float.toString ++ "rem"
 
     <div
@@ -87,7 +89,7 @@ module WordIcon = {
         height: size->Int.toString ++ "rem",
         fontSize: (2. *. widthScaler)->Float.toString ++ "rem",
       }}>
-      {dividedS
+      {textDivisions
       ->Array.map(sPart => {
         <div
           style={
@@ -102,42 +104,15 @@ module WordIcon = {
   }
 }
 
-module Wrap = {
-  @react.component
-  let make = (~children) => {
-    <div className="p-2 border rounded w-fit m-2 border-gray-300 shadow "> {children} </div>
-  }
-}
-
 @react.component
 let make = () => {
   <div className="p-6">
-    <Wrap>
-      <WordIcon text={"Settings"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"Delete"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"Menu"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"Hang Up"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"Edit"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"Home"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"Zoom"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"back"} />
-    </Wrap>
-    <Wrap>
-      <WordIcon text={"Ask Question"} />
-    </Wrap>
+    {["Settings", "Delete", "Menu", "Hang Up", "Edit", "Home", "Zoom", "back", "Ask Question"]
+    ->Array.map(text =>
+      <div className="p-2 border rounded w-fit m-2 border-gray-300 shadow ">
+        <WordIcon text={text} />
+      </div>
+    )
+    ->React.array}
   </div>
 }
