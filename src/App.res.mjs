@@ -6,6 +6,7 @@ import * as JsxRuntime from "react/jsx-runtime";
 
 function getCharWidth(c) {
   switch (c) {
+    case " " :
     case "i" :
     case "l" :
         return 1;
@@ -25,27 +26,20 @@ function App$WordIcon(props) {
   var __size = props.size;
   var size = __size !== undefined ? __size : 4;
   var textChars = props.text.split("");
-  var textCharsAndCharWidth = textChars.map(function (c) {
-        return [
-                c,
-                getCharWidth(c)
-              ];
-      });
-  var textMeasure = Core__Array.reduce(textCharsAndCharWidth, 0, (function (acc, param) {
-          return acc + param[1] | 0;
+  var textMeasure = Core__Array.reduce(textChars, 0, (function (acc, c) {
+          return acc + getCharWidth(c) | 0;
         }));
   var textMeasureRoot = Math.sqrt(textMeasure);
   var bound = Math.round(textMeasureRoot * 2.2) | 0;
-  var match = Core__Array.reduce(textCharsAndCharWidth, [
+  var match = Core__Array.reduce(textChars, [
         [],
         [],
         0
-      ], (function (param, param$1) {
-          var w = param$1[1];
-          var c = param$1[0];
+      ], (function (param, c) {
           var curW = param[2];
           var curS = param[1];
           var acc = param[0];
+          var w = getCharWidth(c);
           if ((curW + w | 0) > bound) {
             return [
                     Belt_Array.concatMany([
@@ -66,11 +60,10 @@ function App$WordIcon(props) {
                   ];
           }
         }));
-  var textCharsDivisions = Belt_Array.concatMany([
-        match[0],
-        [match[1]]
-      ]);
-  var textDivisions = textCharsDivisions.map(function (curS) {
+  var textDivisions = Belt_Array.concatMany([
+          match[0],
+          [match[1]]
+        ]).map(function (curS) {
         return curS.join("");
       });
   var widthScaler = size / textMeasureRoot;
@@ -86,7 +79,7 @@ function App$WordIcon(props) {
                                 }
                               });
                   }),
-              className: " font-black tracking-tighter leading-none flex flex-col items-center justify-center",
+              className: "font-black tracking-tighter leading-none flex flex-col items-center justify-center",
               style: {
                 fontSize: (2 * widthScaler).toString() + "rem",
                 height: size.toString() + "rem",

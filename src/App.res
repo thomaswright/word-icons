@@ -26,7 +26,7 @@ let getCharWidth = c => {
   | "x" => 3
   | "y" => 3
   | "z" => 3
-  | " " => 3
+  | " " => 1
   // | "A" => 4
   // | "B" => 4
   // | "C" => 4
@@ -61,29 +61,25 @@ module WordIcon = {
   @react.component
   let make = (~text: string, ~size: int=4) => {
     let textChars = text->String.split("")
-    let textCharsAndCharWidth = textChars->Array.map(c => (c, c->getCharWidth))
-    let textMeasure = textCharsAndCharWidth->Array.reduce(0, (acc, (_, w)) => {
-      acc + w
+    let textMeasure = textChars->Array.reduce(0, (acc, c) => {
+      acc + c->getCharWidth
     })
     let textMeasureRoot = Math.sqrt(textMeasure->Int.toFloat)
     let bound = Math.round(textMeasureRoot *. 2.2)->Float.toInt
-    let textCharsDivisions = {
-      let (x, y, _) = textCharsAndCharWidth->Array.reduce(([], [], 0), (
-        (acc, curS, curW),
-        (c, w),
-      ) => {
+    let textDivisions = {
+      let (x, y, _) = textChars->Array.reduce(([], [], 0), ((acc, curS, curW), c) => {
+        let w = c->getCharWidth
         curW + w > bound ? ([...acc, curS], [c], w) : (acc, [...curS, c], curW + w)
       })
       [...x, y]
-    }
-    let textDivisions = textCharsDivisions->Array.map(curS => curS->Array.join(""))
+    }->Array.map(curS => curS->Array.join(""))
 
     let widthScaler = size->Int.toFloat /. textMeasureRoot
     let heightScaler = widthScaler /. textDivisions->Array.length->Int.toFloat
     let scaledMaring = "-" ++ (0.8 *. heightScaler)->Float.toString ++ "rem"
 
     <div
-      className={" font-black tracking-tighter leading-none flex flex-col items-center justify-center"}
+      className={"font-black tracking-tighter leading-none flex flex-col items-center justify-center"}
       style={{
         width: size->Int.toString ++ "rem",
         height: size->Int.toString ++ "rem",
