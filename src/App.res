@@ -59,7 +59,7 @@ let getCharWidth = c => {
 
 module WordIcon = {
   @react.component
-  let make = (~text: string, ~size: int=4) => {
+  let make = (~text: string, ~size: float=4.) => {
     let textChars = text->String.split("")
     let textMeasure = textChars->Array.reduce(0, (acc, c) => {
       acc + c->getCharWidth
@@ -74,15 +74,15 @@ module WordIcon = {
       [...x, y]
     }->Array.map(curS => curS->Array.join(""))
 
-    let widthScaler = size->Int.toFloat /. textMeasureRoot
+    let widthScaler = size /. textMeasureRoot
     let heightScaler = widthScaler /. textDivisions->Array.length->Int.toFloat
     let scaledMaring = "-" ++ (0.8 *. heightScaler)->Float.toString ++ "rem"
 
     <div
       className={"font-black tracking-tighter leading-none flex flex-col items-center justify-center"}
       style={{
-        width: size->Int.toString ++ "rem",
-        height: size->Int.toString ++ "rem",
+        width: size->Float.toString ++ "rem",
+        height: size->Float.toString ++ "rem",
         fontSize: (2. *. widthScaler)->Float.toString ++ "rem",
       }}>
       {textDivisions
