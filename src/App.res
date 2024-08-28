@@ -100,15 +100,142 @@ module WordIcon = {
   }
 }
 
+// let getScaler = text => {
+//   let textChars = text->String.split("")
+//   let textMeasure = textChars->Array.reduce(0, (acc, c) => {
+//     acc + c->getCharWidth
+//   })
+
+//   0.1 /. (textMeasure->Int.toFloat +. 0.7) ** 0.4
+// }
+
+// "Settings", "Delete", "Menu", "Hang Up", "Home", "Zoom", "back", "Ask Question"
 @react.component
 let make = () => {
+  let (valueA, setValueA) = React.useState(_ => 0.1)
+  let (valueB, setValueB) = React.useState(_ => 1.4)
+  let (valueC, setValueC) = React.useState(_ => 0.4)
+
+  let getScaler = text => {
+    let textChars = text->String.split("")
+    let textMeasure = textChars->Array.reduce(0, (acc, c) => {
+      acc + c->getCharWidth
+    })
+
+    valueA /. (textMeasure->Int.toFloat +. valueB) ** valueC
+  }
+
+  let size = 60
   <div className="p-6">
-    {["Settings", "Delete", "Menu", "Hang Up", "Edit", "Home", "Zoom", "back", "Ask Question"]
-    ->Array.map(text =>
-      <div className="p-2 border rounded w-fit m-2 border-gray-300 shadow ">
-        <WordIcon text={text} />
+    <div className="flex flex-col w-80">
+      <div>
+        <div className="w-5"> {valueA->Float.toString->React.string} </div>
+        <input
+          type_={"range"}
+          value={valueA->Float.toString}
+          min={"0"}
+          max={"0.15"}
+          step={0.001}
+          onChange={e =>
+            setValueA(v => (e->ReactEvent.Form.target)["value"]->Float.fromString->Option.getOr(v))}
+        />
       </div>
-    )
-    ->React.array}
+      <div>
+        <div className="w-5"> {valueB->Float.toString->React.string} </div>
+        <input
+          type_={"range"}
+          value={valueB->Float.toString}
+          min={"0"}
+          max={"5"}
+          step={0.01}
+          onChange={e =>
+            setValueB(v => (e->ReactEvent.Form.target)["value"]->Float.fromString->Option.getOr(v))}
+        />
+      </div>
+      <div>
+        <div className="w-5"> {valueC->Float.toString->React.string} </div>
+        <input
+          type_={"range"}
+          value={valueC->Float.toString}
+          min={"0"}
+          max={"2"}
+          step={0.01}
+          onChange={e =>
+            setValueC(v => (e->ReactEvent.Form.target)["value"]->Float.fromString->Option.getOr(v))}
+        />
+      </div>
+    </div>
+    // {["Edit", "i", "Something extra extra long", "Zoom"]
+    // ->Array.map(text =>
+    //   <div className="p-2 border rounded w-fit m-2 border-gray-300 shadow ">
+    //     <WordIcon text={text} />
+    //   </div>
+    // )
+    // ->React.array}
+    <div className="flex flex-row max-w-lg flex-wrap">
+      {[
+        "Settings",
+        "Delete",
+        "Hang Up",
+        "i",
+        "Menu",
+        "Home",
+        "Zoom",
+        "back",
+        "Ask Question",
+        "Something extra extra long",
+      ]
+      ->Array.map(text => {
+        let scaler = getScaler(text)
+        <div className=" p-2 border rounded m-2 border-gray-300 shadow w-fit">
+          <div
+            style={{
+              fontSize: (scaler *. size->Int.toFloat)->Float.toString ++ "rem",
+              fontWeight: "900",
+              lineHeight: "0.6",
+              letterSpacing: "-0.05em",
+              textAlign: "center",
+              overflowWrap: "break-word",
+              height: size->Int.toString ++ "px",
+              width: size->Int.toString ++ "px",
+            }}>
+            {text->React.string}
+          </div>
+        </div>
+      })
+      ->React.array}
+    </div>
+
+    // {[
+    //   ("i", 15),
+    //   ("By", 12),
+    //   ("Settings", 8),
+    //   ("Delete", 9),
+    //   ("Menu", 10),
+    //   ("Hang Up", 7),
+    //   ("Home", 10),
+    //   ("Zoom", 10),
+    //   ("back", 10),
+    //   ("Ask Question", 6),
+    // ]
+    // ->Array.map(((text, scale)) => {
+    //   // let scaler = getScaler(text)
+    //   <div className=" p-2 border rounded m-2 border-gray-300 shadow w-fit">
+    //     <div
+    //       style={{
+    //         fontSize: (0.004 *. scale->Int.toFloat *. size->Int.toFloat)->Float.toString ++ "rem",
+    //         fontWeight: "900",
+    //         lineHeight: "0.6",
+    //         letterSpacing: "-0.05em",
+    //         textAlign: "center",
+    //         overflowWrap: "break-word",
+    //         height: size->Int.toString ++ "px",
+    //         width: size->Int.toString ++ "px",
+    //       }}>
+    //       {text->React.string}
+    //     </div>
+    //   </div>
+    // })
+    // ->React.array}
   </div>
 }
