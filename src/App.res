@@ -91,14 +91,3 @@ let make = () => {
     </div>
   </div>
 }
-
-// "Ask Question",
-// "Something extra extra long",
-// "i",
-// "ij",
-// "B",
-// "MiMi",
-// "MM",
-// "Bj",
-// "mm",
-// "BBB",
