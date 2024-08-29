@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import React from "react";
+import React, { useState } from "react";
 import WordIcon from "word-icons";
 
 const aboutText = `This is a react component that will scale a given string 
@@ -32,6 +32,9 @@ function Dedication() {
 }
 
 function App() {
+  let [size, setSize] = useState(40);
+  let [iconText, setIconText] = useState("Example");
+
   return (
     <div className="bg-plain-900 text-plain-100 h-screen overflow-y-scroll">
       <div className="max-w-3xl min-h-full flex flex-col gap-8 p-6">
@@ -64,6 +67,29 @@ function App() {
             __html: marked.parse(aboutText),
           }}
         />
+        <hr className="border-plain-700" />
+
+        <div className="w-80">
+          <input
+            className="py-1 px-2 text-plain-800 mb-8"
+            type="text"
+            value={iconText}
+            onChange={(e) => setIconText(e.target.value)}
+          />
+          <input
+            className=""
+            type="range"
+            min="10"
+            max="100"
+            value={size}
+            onChange={(e) => setSize(e.target.value)}
+          />
+        </div>
+        <div className=" p-2 border rounded border-plain-600 flex flex-row items-center gap-2 w-fit">
+          <WordIcon text={iconText} size={size} />
+        </div>
+        <hr className="border-plain-700" />
+
         <div className=" text-xs ">
           <div className="font-mono py-2 px-3 bg-plain-800 w-fit rounded">
             npm install word-icons
