@@ -1,33 +1,34 @@
-# Word Icons
+# word-icons
 
-A react component for rendering text in a square, so it can be used - for instance - as an icon.
+This is a react component that will scale a given string
+into a square of a given size, making the letters as large as possible.
+Try it out as a placeholder for icons.
 
-### Installation
+## Install
 
 `npm install word-icons`
 
-### Use
+## Use
 
 ```jsx
 import WordIcon from "word-icons";
 
 const MyComponent = () => {
-  <div>
-    <WordIcon text={"Settings"} size={20} />
-  </div>;
+  return (
+    <div>
+      <WordIcon text={"Menu"} size={20} />
+    </div>
+  );
 };
 ```
 
-## Development
+## API
 
-Run ReScript in dev mode:
-
-```sh
-npm run res:dev
-```
-
-In another tab, run the Vite dev server:
-
-```sh
-npm run dev
+```jsx
+<WordIcon
+  text={string}
+  size={number}
+  fontWeight={optional(string)}
+  scale={optional(number)} // scales the font for fine-grained adjustment
+/>
 ```
