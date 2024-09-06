@@ -4,6 +4,10 @@ This is a react component that will scale a given string
 into a square of a given size, making the letters as large as possible.
 Try it out as a placeholder for icons.
 
+## Demo
+
+https://thomaswright.github.io/word-icons/
+
 ## Install
 
 `npm install word-icons`
