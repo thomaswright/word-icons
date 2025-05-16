@@ -23,7 +23,7 @@ function Dedication() {
       {"By "}
       <a
         className="text-blue-500 font-medium"
-        href={"https://github.com/thomaswright"}
+        href={"https://github.com/thomaswright/word-icons"}
       >
         {"Thomas Wright"}
       </a>
