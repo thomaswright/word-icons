@@ -17,7 +17,7 @@ const MyComponent = () => {
   );
 }`;
 
-function Dedication() {
+function Attribution() {
   return (
     <div className="text-slate-500 text-xs">
       {"By "}
@@ -103,7 +103,7 @@ function App() {
         </div>
         <div className="flex-1" />
 
-        <Dedication />
+        <Attribution />
       </div>
     </div>
   );
